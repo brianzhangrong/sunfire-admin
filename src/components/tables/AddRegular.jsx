@@ -36,7 +36,7 @@ class  AddRegular extends React.Component{//在es6中定义一个AddRule类
                     id:values.id,
                  })
                  this.props.form.resetFields();//清空提交的表单
-                 //当值传递到父元素后，通过回调函数触发appendPerson方法将参数values带到父元素
+                 //当值传递到父元素后，通过回调函数触发appendRule方法将参数values带到父元素
                  this.props.callback(values);
              }
          })
@@ -68,11 +68,22 @@ class  AddRegular extends React.Component{//在es6中定义一个AddRule类
         return(
             <div>
                 <Button type="primary" onClick={this.handleAdd}>添加规则</Button>
+               
             <Modal title="新建规则" visible={this.state.visible} onCancel={this.handleOk} onOk={this.handleOk}>
                 <Form onSubmit={this.handleSubmit}>
                     <FormItem {...formItemLayout} label = "规则id:"  hasFeedback>
-                
-                         <Input value={this.props.id} disabled={true} size="small" style={{width:50}} ></Input>
+                    {getFieldDecorator('id', 
+                    
+                    {initialValue:[this.props.id]},
+                    {
+                                
+                        rules: [ {
+                            required: true, message: '请输入规则起始位置'
+                        }]
+                    })
+                    
+                    (   <Input name="id"  disabled={true} size="small" style={{width:50}} ></Input>)
+                }
                             
                     </FormItem>
                     <FormItem {...formItemLayout} label = "起始位置"  hasFeedback>

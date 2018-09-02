@@ -8,13 +8,13 @@ import AddRegular from './AddRegular'
 import ModifyRegular from './ModifyRegular'
 
 const data = [];
-for (let i = 0; i < 4; i++) {
+
   data.push({
-    key:i.toString(),
-    id: i.toString(),
-    detail: `Edrward ${i}`,
+    key:0,
+    id: 0,
+    detail: `{"beginPosition":"1","beginSplitSymbol":"1","endPosition":"1","endSplitSymbol":"1","value":"sunfire"}`,
   });
-}
+
 const FormItem = Form.Item;
 const EditableContext = React.createContext();
 
@@ -72,26 +72,28 @@ export default class EditableTable extends React.Component {
   constructor(props) {
     super(props);
     this.columns = [{
-      title: 'id',
+      title: '规则id',
       dataIndex: 'id',
       width: '10%',
       editable: 'true',
     }, {
-      title: 'detail',
+      title: '描述',
       dataIndex: 'detail',
       width: '60%',
       editable: 'true',
     },{
-      title: 'operation',
+      title: '操作',
       dataIndex: 'operation',
+   
       render: (text, record) => {
         return (
-          this.state.dataSource.length > 1
+          this.state.dataSource.length >= 1
             ? (
               <div>
-              <ModifyRegular id={this.props.id}/>
+              <ModifyRegular id={record.id} detail={record.detail} callback={this.modifyRule}/>
               <Popconfirm title="确定删除?" onConfirm={() => this.handleDelete(record.id)}>
-                <a href="javascript:;">删除</a>
+                {/* <a href="javascript:;"> 删除</a> */}
+                <Button type="primary" size="small" >删除</Button>
               </Popconfirm>
              
               </div>
@@ -104,23 +106,56 @@ export default class EditableTable extends React.Component {
       dataSource: [{
         id: 0,
         key:0,
-        detail: 'Edward King 0',
+        detail: '{"beginPosition":"1","beginSplitSymbol":"1","endPosition":"1","endSplitSymbol":"1","value":"sunfire"}',
        
       }, {
         key:1,
         id: 1,
-        detail: 'Edward King 1',
+        detail: '{"beginPosition":"1","beginSplitSymbol":"1","endPosition":"1","endSplitSymbol":"1","value":"sunfire"}',
     
       }],
       id: 2,
       key:2,
     };
-
+    this.modifyRule=this.modifyRule.bind(this);
     this.appendRule=this.appendRule.bind(this);
   }
+  modifyRule(event){//得到子元素传过来的值   
+   
+   const { id,key, dataSource } = this.state;
 
+   let  newDataSource =Object.assign(dataSource) 
+ 
+    newDataSource.forEach(function (element) {
+      Object.keys(element).some(function (key) {
+       
+          if (key == "id" && element.id==event.id) {
+             let a ={};
+             element.id=eval(event.id),
+             element.key=eval(event.id),
+             a.beginPosition=event.beginPosition,
+             a.endPosition=event.endPosition,
+             a.value =event.value,
+             a.beginSplitSymbol=event.beginSplitSymbol,
+             a.endSplitSymbol=event.endSplitSymbol,
+             element.detail=JSON.stringify(a)
+             console.log("========")
+        
+          }
+        //  console.log(key)
+      })
+  })
+  this.setState({dataSource:newDataSource,id:id,key:key})
+  // let sortData =array.sort();//对遍历得到的数组进行排序
+  // let MaxData = sortData[(this.state.dataSource.length)-1]//取最后一位下标的值
+  // event.key=MaxData+1;
+  // event.id = MaxData+1;
+  // this.setState({
+  //       dataSource:[...this.state.dataSource,{"id":event.id,"detail":JSON.stringify(event)}]
+  //   })
+    }
   handleDelete = (id) => {
-    console.log('delete:'+id)
+    // console.log('delete:'+id)
     const dataSource = [...this.state.dataSource];
     this.setState({ dataSource: dataSource.filter(item => item.id !== id) });
   }
@@ -152,10 +187,10 @@ export default class EditableTable extends React.Component {
 }
 
 appendRule(event){//得到子元素传过来的值
- console.log(event)
+//  console.log(event)
 //   let array = [];
 //   let id = 0;
-console.log(this.state)
+//console.log(this.state)
 const { id, dataSource } = this.state;
   const newData = {
     "id": id,
@@ -168,23 +203,7 @@ const { id, dataSource } = this.state;
     id: id+1 ,
     key:id+1,
   });
-  // this.state.dataSource.forEach(function (element) {
-  //     Object.keys(element).some(function (key) {
-  //         if (key === 'id') {
-  //             id++;
-  //             array[id] = element.id
-            
-  //         }
-  //       //  console.log(key)
-  //     })
-  // })
-  // let sortData =array.sort();//对遍历得到的数组进行排序
-  // let MaxData = sortData[(this.state.dataSource.length)-1]//取最后一位下标的值
-  // event.key=MaxData+1;
-  // event.id = MaxData+1;
-  // this.setState({
-  //       dataSource:[...this.state.dataSource,{"id":event.id,"detail":JSON.stringify(event)}]
-  //   })
+  
 }
   render() {
     const { dataSource } = this.state;
