@@ -37,3 +37,8 @@ export const admin = () => get({url: config.MOCK_AUTH_ADMIN});
 
 // 访问权限获取
 export const guest = () => get({url: config.MOCK_AUTH_VISITOR});
+
+export const  sunfireAdminSelectRegular=()=>get({url:config.SUNFIRE_ADMIN_SELECT_REGULAR});
+export const  sunfireAdminUpdateRegular=()=>get({url:config.SUNFIRE_ADMIN_UPDATE_REGULAR});
+export const  sunfireAdminDeleteRegular=()=>get({url:config.SUNFIRE_ADMIN_DELETE_REGULAR});
+export const  sunfireAdminInitApp=()=>get({url:config.SUNFIRE_ADMIN_INIT_APP});

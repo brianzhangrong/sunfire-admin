@@ -3,17 +3,20 @@
  */
 
 import React from 'react';
-import { Table, Input, InputNumber, Popconfirm, Form,Button } from 'antd';
+import {Table, Input, InputNumber, Popconfirm, Form,Button } from 'antd';
 import AddRegular from './AddRegular'
 import ModifyRegular from './ModifyRegular'
 
-const data = [];
+import {fetchData, receiveData } from '@/action';
+import {sunfireAdminSelectRegular} from '@/axios'
 
-  data.push({
-    key:0,
-    id: 0,
-    detail: `{"beginPosition":"1","beginSplitSymbol":"1","endPosition":"1","endSplitSymbol":"1","value":"sunfire"}`,
-  });
+const data =fetchData({funcName: sunfireAdminSelectRegular, param: {'appname':'irayProxy'}})
+console.log('....',data)
+// data.push({
+//   key:0,
+//   id: 0,
+//   detail:`{"beginPosition":"1","beginSplitSymbol":"1","endPosition":"1","endSplitSymbol":"1","value":"sunfire"}`,
+// });
 
 const FormItem = Form.Item;
 const EditableContext = React.createContext();
@@ -120,10 +123,16 @@ export default class EditableTable extends React.Component {
     this.modifyRule=this.modifyRule.bind(this);
     this.appendRule=this.appendRule.bind(this);
   }
+  
   modifyRule(event){//得到子元素传过来的值   
    
    const { id,key, dataSource } = this.state;
-
+   const isArray=(obj)=>{if( Object.prototype.toString.call(obj) === '[object Array]'){
+     
+    return isArray(obj[0]);
+  }else{
+    return obj;
+  }}
    let  newDataSource =Object.assign(dataSource) 
  
     newDataSource.forEach(function (element) {
@@ -131,15 +140,15 @@ export default class EditableTable extends React.Component {
        
           if (key == "id" && element.id==event.id) {
              let a ={};
-             element.id=eval(event.id),
-             element.key=eval(event.id),
-             a.beginPosition=event.beginPosition,
-             a.endPosition=event.endPosition,
-             a.value =event.value,
-             a.beginSplitSymbol=event.beginSplitSymbol,
-             a.endSplitSymbol=event.endSplitSymbol,
+             element.id= isArray(event.id),
+             element.key= isArray(event.id),
+             a.beginPosition= isArray(event.beginPosition),
+             a.endPosition= isArray(event.endPosition),
+             a.value = isArray(event.value),
+             a.beginSplitSymbol= isArray(event.beginSplitSymbol),
+             a.endSplitSymbol= isArray(event.endSplitSymbol),
              element.detail=JSON.stringify(a)
-             console.log("========")
+             console.log(event,"---",element)
         
           }
         //  console.log(key)
