@@ -12,7 +12,8 @@ class  ModifyRegular extends React.Component{//在es6中定义一个ModifyRule�
          this.handleOk = this.handleOk.bind(this)
          this.handleClear = this.handleClear.bind(this)
          this.state = {
-            visible:false
+            visible:false,
+            appName:'',
          }
       
         console.log("props:",props)
@@ -26,6 +27,7 @@ class  ModifyRegular extends React.Component{//在es6中定义一个ModifyRule�
             endSplitSymbol:detail.endSplitSymbol,
             value:detail.value,
             id:props.id,
+            appName:props.appName,
         };
        
      }

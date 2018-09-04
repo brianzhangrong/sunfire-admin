@@ -126,12 +126,14 @@ export default class EditableTable extends React.Component {
         detail:JSON.stringify(k),
         id:k.id,
         key:k.id,
+        appName:this.state.appName
      }
    
      self.setState( {
         dataSource:[...this.state.dataSource,dataSource],
         id:k.id,
-        key:k.id
+        key:k.id,
+        appName:this.state.appName
       }
       )
     })});
@@ -171,10 +173,10 @@ export default class EditableTable extends React.Component {
   
   modifyRule(event){//得到子元素传过来的值   
   
-   const { id,key, dataSource } = this.state;
+   const { id,key, dataSource,appName } = this.state;
  
    let  newDataSource =Object.assign(dataSource) 
- 
+   var self = this
    newDataSource.forEach(function (element) {
     Object.keys(element).some(function (key) {
         if (key == "id" && element.id==event.id) {
@@ -189,7 +191,7 @@ export default class EditableTable extends React.Component {
             element.detail=JSON.stringify(a)
           //  console.log(event,"---",element)
           let updateRegular={}
-          updateRegular.appName=this.state.appName
+          updateRegular.appName=self.state.appName
           updateRegular.regularList=new Array()
           let regular={}
           regular.beginPosition=a.beginPosition
@@ -204,7 +206,7 @@ export default class EditableTable extends React.Component {
       //  console.log(key)
     })
   })
-  this.setState({dataSource:newDataSource,id:id,key:key})
+  this.setState({dataSource:newDataSource,id:id,key:key,appName:this.state.appName})
   // let sortData =array.sort();//对遍历得到的数组进行排序
   // let MaxData = sortData[(this.state.dataSource.length)-1]//取最后一位下标的值
   // event.key=MaxData+1;
