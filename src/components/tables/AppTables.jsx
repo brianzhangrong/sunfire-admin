@@ -15,7 +15,7 @@ class AppTables extends React.Component {
     render() {
         return (
             <div className="center" style={{height: '100%', background: '#ececec', overflow: 'hidden'}}>
-                 <BasicTable id={}></BasicTable>
+                 <BasicTable appName={}></BasicTable>
             </div>
         )
     }

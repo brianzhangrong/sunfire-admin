@@ -52,12 +52,14 @@ class BasicTable  extends React.Component {
     
       render() {
        
+       const  appName = this.props.appName.substr(this.props.appName.lastIndexOf('/')+1)
+       console.log("basicTableprops:",appName)
         return (
           <div>
             {/* <Button onClick={this.handleAdd} type="primary" style={{ marginBottom: 16 }}>
               Add a row
             </Button> */}
-            <EditableTable/>
+            <EditableTable appName={appName}/>
           </div>
         );
       }

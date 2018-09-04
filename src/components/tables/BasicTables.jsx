@@ -9,14 +9,19 @@ import SortTable from './SortTable';
 import SearchTable from './SearchTable';
 import BreadcrumbCustom from '../BreadcrumbCustom';
 
-const BasicTables = () => (
-    <div className="gutter-example">
-        <BreadcrumbCustom first="监控配置" second="app元数据" />
+class BasicTables extends React.Component {
+    constructor(props) {
+        super(props);
+        console.log("basicTable:",props)
+    }
+    render() {
+        return ( <div className="gutter-example">
+        <BreadcrumbCustom first="监控配置" second={this.props.title} />
         <Row gutter={16}>
             <Col className="gutter-row" md={24}>
                 <div className="gutter-box">
                     <Card title="规则引擎配置" bordered={false}>
-                        <BasicTable  />
+                        <BasicTable appName={this.props.location.pathname} />
                     </Card>
                 </div>
             </Col>
@@ -53,7 +58,8 @@ const BasicTables = () => (
                 </div>
             </Col>
         </Row> */}
-    </div>
-);
+    </div>);
+    }
+}
 
 export default BasicTables;

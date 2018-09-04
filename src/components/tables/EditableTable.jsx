@@ -77,7 +77,8 @@ export default class EditableTable extends React.Component {
     this.state={
       dataSource:[],
       id:1,
-      key:1
+      key:1,
+      appName:props.appName
     }
 
 
@@ -120,7 +121,7 @@ export default class EditableTable extends React.Component {
   componentDidMount(){
     let self =this;
     // 发起 ajax 获取到数据后调用 setState 方法更新组件的数据
-    let regular= sunfireAdminSelectRegular({appName:"irayProxy"},(res)=>{res.data.map((k,v)=>{
+    let regular= sunfireAdminSelectRegular({appName:this.state.appName},(res)=>{res.data.map((k,v)=>{
       let dataSource={
         detail:JSON.stringify(k),
         id:k.id,
@@ -188,7 +189,7 @@ export default class EditableTable extends React.Component {
             element.detail=JSON.stringify(a)
           //  console.log(event,"---",element)
           let updateRegular={}
-          updateRegular.appName="irayProxy"
+          updateRegular.appName=this.state.appName
           updateRegular.regularList=new Array()
           let regular={}
           regular.beginPosition=a.beginPosition
@@ -223,7 +224,7 @@ export default class EditableTable extends React.Component {
       if(detail.id==id){
         console.log('deleteId:',id)
         let deleteRegular={}
-        deleteRegular.appName = "irayProxy"
+        deleteRegular.appName = this.state.appName
         deleteRegular.regularList = new Array()
         let regular ={}
         regular.id=id
@@ -284,7 +285,7 @@ const { id, dataSource } = this.state;
     key:id+1,
   });
   let updateRegular={}
-  updateRegular.appName="irayProxy"
+  updateRegular.appName=this.state.appName
   updateRegular.regularList=new Array()
   let regular={}
   regular.beginPosition=event.beginPosition

@@ -4,7 +4,7 @@ let allApp={}
 export const menu=[]
 sunfireAdminSelectApp({},(res)=>{
    res.data.appList.forEach((k,v) => {
-       menu.push({ key: '/app/table/'+k, title: k, component: 'BasicTable'})
+       menu.push({ key: '/app/table/'+k, title: k, component: 'BasicTables'})
    });
 })
 
