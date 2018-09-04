@@ -6,22 +6,27 @@ const Option = Select.Option;
 class  ModifyRegular extends React.Component{//在es6中定义一个ModifyRule类
      constructor(props){//构造函数
          super(props);
-         let detail =JSON.parse(props.detail)
-        //  console.log(detail)
-         this.state = {
-             visible:false,
-             beginPosition:detail.beginPosition,
-             beginSplitSymbol:detail.beginSplitSymbol,
-             endPosition:detail.endPosition,
-             endSplitSymbol:detail.endSplitSymbol,
-             value:detail.value,
-             id:props.id,
-         };
+         
          this.handleAdd = this.handleAdd.bind(this);
          this.handleSubmit = this.handleSubmit.bind(this);
          this.handleOk = this.handleOk.bind(this)
          this.handleClear = this.handleClear.bind(this)
+         this.state = {
+            visible:false
+         }
+      
+        console.log("props:",props)
+        let detail =JSON.parse(props.detail)
        
+        this.state= {
+            visible:false,
+            beginPosition:detail.beginPosition,
+            beginSplitSymbol:detail.beginSplitSymbol,
+            endPosition:detail.endPosition,
+            endSplitSymbol:detail.endSplitSymbol,
+            value:detail.value,
+            id:props.id,
+        };
        
      }
     handleAdd() {
@@ -79,7 +84,7 @@ class  ModifyRegular extends React.Component{//在es6中定义一个ModifyRule�
             <div>
                  <Button type="primary" size="small" onClick={this.handleAdd}>修改</Button>
                   {/* <a type="primary"  state="{width:40}" > </a> */}
-            <Modal title="修改规则" visible={this.state.visible} onCancel={this.handleOk} onOk={this.handleOk}>
+            <Modal title="修改规则" visible={this.state.visible} onCancel={this.handleOk} onOk={this.handleSubmit}>
                 <Form onSubmit={this.handleSubmit}>
                     <FormItem {...formItemLayout} label = "规则id:"  hasFeedback>
                     {getFieldDecorator('id', 

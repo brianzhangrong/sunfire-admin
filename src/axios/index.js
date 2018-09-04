@@ -2,7 +2,7 @@
  * Created by hao.cheng on 2017/4/16.
  */
 import axios from 'axios';
-import { get } from './tools';
+import { get,post,postWithCallBack } from './tools';
 import * as config from './config';
 
 export const getPros = () => axios.post('http://api.xitu.io/resources/github', {
@@ -37,8 +37,19 @@ export const admin = () => get({url: config.MOCK_AUTH_ADMIN});
 
 // 访问权限获取
 export const guest = () => get({url: config.MOCK_AUTH_VISITOR});
+const headers ={
+   "Authorization":"Basic YWRtaW46YWRtaW4=",
+   "Access-Control-Allow-Origin":"*",
+   'Content-Type': 'application/json;charset=UTF-8',
+   "Access-Control-Allow-Methods" : "GET,POST,PUT,OPTIONS",
+   "Access-Control-Allow-Credentials" : "true",
+   "Access-Control-Allow-Headers": "Content-Type"
+}
+axios.defaults.headers.post['Content-Type'] = 'application/json';
 
-export const  sunfireAdminSelectRegular=()=>get({url:config.SUNFIRE_ADMIN_SELECT_REGULAR});
-export const  sunfireAdminUpdateRegular=()=>get({url:config.SUNFIRE_ADMIN_UPDATE_REGULAR});
-export const  sunfireAdminDeleteRegular=()=>get({url:config.SUNFIRE_ADMIN_DELETE_REGULAR});
-export const  sunfireAdminInitApp=()=>get({url:config.SUNFIRE_ADMIN_INIT_APP});
+
+export const  sunfireAdminSelectRegular=(data,callback)=>postWithCallBack({url:config.SUNFIRE_ADMIN_SELECT_REGULAR,data:data,headers:headers,callback:callback});
+export const  sunfireAdminUpdateRegular=(data,callback)=>postWithCallBack({url:config.SUNFIRE_ADMIN_UPDATE_REGULAR,data:data,headers:headers,callback:callback});
+export const  sunfireAdminDeleteRegular=(data,callback)=>postWithCallBack({url:config.SUNFIRE_ADMIN_DELETE_REGULAR,data:data,headers:headers,callback:callback});
+export const  sunfireAdminInitApp=(data,callback)=>postWithCallBack({url:config.SUNFIRE_ADMIN_INIT_APP,data:data,headers:headers,callback:callback});
+export const  sunfireAdminSelectApp = (data,callback)=>postWithCallBack({url:config.SUNFIRE_ADMIN_SELECT_APP,data:data,headers:headers,callback:callback});

@@ -27,22 +27,22 @@ const columns = [{
     ),
 }];
 
-const data = [{
-    key: '1',
-    regularId: 1,
-    regularDetail: "1--------",
-    modify: '修改',
-}, {
-    key: '2',
-    regularId: 2,
-    regularDetail: "2--------",
-    modify: '修改',
-}, {
-    key: '3',
-    regularId: 23,
-    regularDetail: "3--------",
-    modify: '修改',
-}];
+// const data = [{
+//     key: '1',
+//     regularId: 1,
+//     regularDetail: "1--------",
+//     modify: '修改',
+// }, {
+//     key: '2',
+//     regularId: 2,
+//     regularDetail: "2--------",
+//     modify: '修改',
+// }, {
+//     key: '3',
+//     regularId: 23,
+//     regularDetail: "3--------",
+//     modify: '修改',
+// }];
 
 //fetchData({funcName: 'admin', stateName: 'auth'});
 class BasicTable  extends React.Component {
@@ -57,8 +57,7 @@ class BasicTable  extends React.Component {
             {/* <Button onClick={this.handleAdd} type="primary" style={{ marginBottom: 16 }}>
               Add a row
             </Button> */}
-            <EditableTable
-            />
+            <EditableTable/>
           </div>
         );
       }

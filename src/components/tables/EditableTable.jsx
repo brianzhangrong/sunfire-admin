@@ -8,10 +8,10 @@ import AddRegular from './AddRegular'
 import ModifyRegular from './ModifyRegular'
 
 import {fetchData, receiveData } from '@/action';
-import {sunfireAdminSelectRegular} from '@/axios'
+import {sunfireAdminSelectRegular,sunfireAdminUpdateRegular,sunfireAdminDeleteRegular} from '@/axios'
+import { SUNFIRE_ADMIN_SELECT_REGULAR } from '../../axios/config';
 
-const data =fetchData({funcName: sunfireAdminSelectRegular, param: {'appname':'irayProxy'}})
-console.log('....',data)
+
 // data.push({
 //   key:0,
 //   id: 0,
@@ -74,15 +74,22 @@ class EditableCell extends React.Component {
 export default class EditableTable extends React.Component {
   constructor(props) {
     super(props);
+    this.state={
+      dataSource:[],
+      id:1,
+      key:1
+    }
+
+
     this.columns = [{
       title: '规则id',
       dataIndex: 'id',
-      width: '10%',
+      width: '7%',
       editable: 'true',
     }, {
       title: '描述',
       dataIndex: 'detail',
-      width: '60%',
+      width: '80%',
       editable: 'true',
     },{
       title: '操作',
@@ -104,55 +111,97 @@ export default class EditableTable extends React.Component {
         );
       },
     }];
+   
 
-    this.state = {
-      dataSource: [{
-        id: 0,
-        key:0,
-        detail: '{"beginPosition":"1","beginSplitSymbol":"1","endPosition":"1","endSplitSymbol":"1","value":"sunfire"}',
-       
-      }, {
-        key:1,
-        id: 1,
-        detail: '{"beginPosition":"1","beginSplitSymbol":"1","endPosition":"1","endSplitSymbol":"1","value":"sunfire"}',
-    
-      }],
-      id: 2,
-      key:2,
-    };
     this.modifyRule=this.modifyRule.bind(this);
     this.appendRule=this.appendRule.bind(this);
+  
   }
+  componentDidMount(){
+    let self =this;
+    // 发起 ajax 获取到数据后调用 setState 方法更新组件的数据
+    let regular= sunfireAdminSelectRegular({appName:"irayProxy"},(res)=>{res.data.map((k,v)=>{
+      let dataSource={
+        detail:JSON.stringify(k),
+        id:k.id,
+        key:k.id,
+     }
+   
+     self.setState( {
+        dataSource:[...this.state.dataSource,dataSource],
+        id:k.id,
+        key:k.id
+      }
+      )
+    })});
+  }
+  componentWillUnmount(){
+    
+  }
+ 
+  componentWillMount(){
+    // const data =fetchData({funcName: sunfireAdminSelectRegular, param: {"appName":"irayProxy"}})
+    // 拉取远程数据
+    // 开启假数据服务器：
+    // cd fake-server && npm install && node index.js
+   
+   
+    
+  }
+ // this.state = {
+  //   dataSource: [{
+  //     id: 0,
+  //     key:0,
+  //     detail: '{"beginPosition":"1","beginSplitSymbol":"1","endPosition":"1","endSplitSymbol":"1","value":"sunfire"}',
+     
+  //   }, {
+  //     key:1,
+  //     id: 1,
+  //     detail: '{"beginPosition":"1","beginSplitSymbol":"1","endPosition":"1","endSplitSymbol":"1","value":"sunfire"}',
+  
+  //   }],
+  //   id: 2,
+  //   key:2,
+  // };
+// 使用自定义的 fetchData 方法从远程服务器获取数据
+  
+
+
   
   modifyRule(event){//得到子元素传过来的值   
-   
+  
    const { id,key, dataSource } = this.state;
-   const isArray=(obj)=>{if( Object.prototype.toString.call(obj) === '[object Array]'){
-     
-    return isArray(obj[0]);
-  }else{
-    return obj;
-  }}
+ 
    let  newDataSource =Object.assign(dataSource) 
  
-    newDataSource.forEach(function (element) {
-      Object.keys(element).some(function (key) {
-       
-          if (key == "id" && element.id==event.id) {
-             let a ={};
-             element.id= isArray(event.id),
-             element.key= isArray(event.id),
-             a.beginPosition= isArray(event.beginPosition),
-             a.endPosition= isArray(event.endPosition),
-             a.value = isArray(event.value),
-             a.beginSplitSymbol= isArray(event.beginSplitSymbol),
-             a.endSplitSymbol= isArray(event.endSplitSymbol),
-             element.detail=JSON.stringify(a)
-             console.log(event,"---",element)
-        
-          }
-        //  console.log(key)
-      })
+   newDataSource.forEach(function (element) {
+    Object.keys(element).some(function (key) {
+        if (key == "id" && element.id==event.id) {
+            let a ={};
+            element.id= isArray(event.id),
+            element.key= isArray(event.id),
+            a.beginPosition= isArray(event.beginPosition),
+            a.endPosition= isArray(event.endPosition),
+            a.value = isArray(event.value),
+            a.beginSplitSymbol= isArray(event.beginSplitSymbol),
+            a.endSplitSymbol= isArray(event.endSplitSymbol),
+            element.detail=JSON.stringify(a)
+          //  console.log(event,"---",element)
+          let updateRegular={}
+          updateRegular.appName="irayProxy"
+          updateRegular.regularList=new Array()
+          let regular={}
+          regular.beginPosition=a.beginPosition
+          regular.beginSplitSymbol=a.beginSplitSymbol
+          regular.endPosition=a.endPosition
+          regular.endSplitSymbol=a.endSplitSymbol
+          regular.value=a.value
+          regular.id=element.id
+          updateRegular.regularList.push(regular)
+          sunfireAdminUpdateRegular(JSON.stringify(updateRegular),(res)=>{console.log("modify:",res.data)})
+        }
+      //  console.log(key)
+    })
   })
   this.setState({dataSource:newDataSource,id:id,key:key})
   // let sortData =array.sort();//对遍历得到的数组进行排序
@@ -167,6 +216,28 @@ export default class EditableTable extends React.Component {
     // console.log('delete:'+id)
     const dataSource = [...this.state.dataSource];
     this.setState({ dataSource: dataSource.filter(item => item.id !== id) });
+    
+    dataSource.forEach((k,v)=>{
+      let detail =JSON.parse(k.detail)
+      console.log(detail.id+"delete:",id)
+      if(detail.id==id){
+        console.log('deleteId:',id)
+        let deleteRegular={}
+        deleteRegular.appName = "irayProxy"
+        deleteRegular.regularList = new Array()
+        let regular ={}
+        regular.id=id
+      
+        regular.beginPosition=detail.beginPosition
+        regular.endPosition=detail.endPosition
+        regular.beginSplitSymbol=detail.beginSplitSymbol
+        regular.endSplitSymbol=detail.endSplitSymbol
+        deleteRegular.regularList.push(regular)
+        // console.log(detail.beginPosition+"==="+detail.endPosition)
+        sunfireAdminDeleteRegular(JSON.stringify(deleteRegular),(res)=>{console.log("deleteRegular:",res.data)})
+      }
+    })
+   
   }
 
   handleAdd = () => {
@@ -174,7 +245,7 @@ export default class EditableTable extends React.Component {
     const newData = {
       id: id,
       key:id,
-      detail: `Edward King ${id}`,
+      detail: ``,
   
     };
     this.setState({
@@ -202,8 +273,8 @@ appendRule(event){//得到子元素传过来的值
 //console.log(this.state)
 const { id, dataSource } = this.state;
   const newData = {
-    "id": id,
-    "key":id,
+    "id": id+1,
+    "key":id+1,
     "detail": JSON.stringify(event),
 
   };
@@ -212,9 +283,22 @@ const { id, dataSource } = this.state;
     id: id+1 ,
     key:id+1,
   });
-  
+  let updateRegular={}
+  updateRegular.appName="irayProxy"
+  updateRegular.regularList=new Array()
+  let regular={}
+  regular.beginPosition=event.beginPosition
+  regular.beginSplitSymbol=event.beginSplitSymbol
+  regular.endPosition=event.endPosition
+  regular.endSplitSymbol=event.endSplitSymbol
+  regular.value=event.value
+  regular.id=isArray(event.id)
+  updateRegular.regularList.push(regular)
+  sunfireAdminUpdateRegular(JSON.stringify(updateRegular),(res)=>{console.log("updateres:",res.data)})
 }
   render() {
+   // console.log(this.state)
+  
     const { dataSource } = this.state;
     const components = {
       body: {
@@ -242,7 +326,7 @@ const { id, dataSource } = this.state;
         {/* <Button onClick={this.handleAdd} type="primary" style={{ marginBottom: 16 }}>
           新增规则
         </Button> */}
-        <AddRegular  callback={this.appendRule} id={this.state.id}/>
+        <AddRegular  callback={this.appendRule} id={this.state.id+1}/>
         <Table
           components={components}
           rowClassName={() => 'editable-row'}
@@ -255,3 +339,9 @@ const { id, dataSource } = this.state;
     );
   }
 }
+
+const isArray=(obj)=>{if( Object.prototype.toString.call(obj) === '[object Array]'){
+  return isArray(obj[0]);
+}else{
+  return obj;
+}}

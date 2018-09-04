@@ -29,3 +29,9 @@ export const post = ({url, data, msg = '接口异常', headers}) =>
         console.log(err);
         message.warn(msg);
     });
+
+export const postWithCallBack = ({url, data, msg = '接口异常', headers,callback}) =>
+axios.post(url, data, headers).then(res => callback(res)).catch(err => {
+    console.log(err);
+    message.warn(msg);
+});
